@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Интерактивный тренажёр немецких модальных глаголов в Präsens и Präteritum." />
+  <meta name="theme-color" content="#1248d8" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231248d8'/%3E%3Cpath d='M8 9h16v4H8zm0 10h16v4H8z' fill='white'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23ff6a3d'/%3E%3C/svg%3E" />
+  <title>Modal — тренажёр немецких глаголов</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#practice" aria-label="Modal, на главную">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+        <span>MODAL</span>
+        <small>Deutschtrainer</small>
+      </a>
+
+      <nav class="top-actions" aria-label="Основная навигация">
+        <button class="nav-button is-active" type="button" data-scroll-practice>Практика</button>
+        <button class="nav-button" type="button" data-open-reference>Таблица</button>
+        <button class="nav-button" type="button" data-open-bank>Банк <span id="bank-count">312</span></button>
+      </nav>
+
+      <button class="progress-pill" type="button" data-open-progress aria-label="Открыть подробный прогресс">
+        <span class="mini-ring" id="header-ring" aria-hidden="true"></span>
+        <span><b id="header-progress">0%</b><small>освоено</small></span>
+      </button>
+    </header>
+
+    <main id="practice" class="workspace">
+      <aside class="control-panel" aria-label="Настройки тренировки">
+        <div class="panel-heading">
+          <p class="eyebrow">Режим</p>
+          <h1>Modalverben</h1>
+        </div>
+
+        <fieldset class="mode-switcher">
+          <legend>Выберите время</legend>
+          <button class="mode-button is-active" type="button" data-tense="mixed">
+            <span class="mode-icon">↯</span><span><b>Смешанный</b><small>Präsens + Präteritum</small></span>
+          </button>
+          <button class="mode-button" type="button" data-tense="present">
+            <span class="mode-icon">P</span><span><b>Настоящее</b><small>Präsens</small></span>
+          </button>
+          <button class="mode-button" type="button" data-tense="past">
+            <span class="mode-icon">Pr</span><span><b>Прошедшее</b><small>Präteritum</small></span>
+          </button>
+        </fieldset>
+
+        <label class="select-label" for="verb-filter">Глагол</label>
+        <div class="select-wrap">
+          <select id="verb-filter">
+            <option value="all">Все модальные глаголы</option>
+            <option value="können">können — мочь</option>
+            <option value="müssen">müssen — быть должным</option>
+            <option value="dürfen">dürfen — иметь право</option>
+            <option value="sollen">sollen — следовать указанию</option>
+            <option value="wollen">wollen — хотеть</option>
+            <option value="mögen">mögen — любить, нравиться</option>
+          </select>
+          <span aria-hidden="true">⌄</span>
+        </div>
+
+        <div class="streak-card">
+          <span class="streak-icon" aria-hidden="true">✦</span>
+          <span><small>Серия сейчас</small><strong><span id="streak-value">0</span> верных</strong></span>
+        </div>
+
+        <button class="quiet-button" type="button" data-new-session>Новая сессия <span>↻</span></button>
+      </aside>
+
+      <section class="practice-column" aria-live="polite">
+        <div class="session-line">
+          <div>
+            <span id="question-counter">Задание 1 из 10</span>
+            <strong id="question-type">Вставьте форму глагола</strong>
+          </div>
+          <div class="session-track" aria-label="Прогресс текущей сессии">
+            <span id="session-track-fill"></span>
+          </div>
+          <span class="score-label"><b id="session-score">0</b>/<span id="session-total">10</span></span>
+        </div>
+
+        <article class="exercise-card" id="exercise-card">
+          <div class="card-meta">
+            <span class="tense-badge" id="tense-badge">PRÄSENS</span>
+            <span class="verb-badge" id="verb-badge">können · мочь</span>
+          </div>
+
+          <div class="meaning-cue">
+            <span>Контекст</span>
+            <p id="context-cue">возможность или способность</p>
+          </div>
+
+          <div class="sentence-stage">
+            <p class="sentence" id="sentence" lang="de">Ich <span class="gap">_____</span> heute länger arbeiten.</p>
+            <p class="translation" id="translation">Сегодня я могу работать дольше.</p>
+          </div>
+
+          <form id="answer-form" class="answer-area" autocomplete="off">
+            <label id="answer-label" for="answer-input">Ваша форма</label>
+            <div class="input-row">
+              <input id="answer-input" name="answer" type="text" lang="de" placeholder="Например: kann" spellcheck="false" autocapitalize="none" />
+              <button class="check-button" type="submit">Проверить <span>↗</span></button>
+            </div>
+            <div class="choice-grid" id="choice-grid" role="group" aria-label="Варианты ответа" hidden></div>
+          </form>
+
+          <div class="feedback" id="feedback" hidden>
+            <div class="feedback-icon" id="feedback-icon" aria-hidden="true">✓</div>
+            <div>
+              <strong id="feedback-title">Верно</strong>
+              <p id="feedback-text"></p>
+            </div>
+            <button type="button" id="next-button">Следующее <span>→</span></button>
+          </div>
+        </article>
+
+        <div class="keyboard-hint"><kbd>Enter</kbd><span>проверить / продолжить</span></div>
+
+        <section class="session-summary" id="session-summary" hidden>
+          <p class="eyebrow">Сессия завершена</p>
+          <h2><span id="summary-score">0</span> из <span id="summary-total">10</span></h2>
+          <p id="summary-copy">Хороший темп. Следующая десятка закрепит формы.</p>
+          <button class="check-button" type="button" data-new-session>Ещё 10 заданий <span>↻</span></button>
+        </section>
+      </section>
+
+      <aside class="insight-panel" aria-label="Прогресс по глаголам">
+        <div class="mastery-card">
+          <div class="mastery-top">
+            <div><p class="eyebrow">Всего освоено</p><strong><span id="mastered-count">0</span><small>/<span id="mastery-total">312</span></small></strong></div>
+            <div class="mastery-ring" id="mastery-ring"><span id="mastery-percent">0%</span></div>
+          </div>
+          <p class="mastery-note">Задание считается освоенным после верного ответа.</p>
+        </div>
+
+        <div class="verb-progress-card">
+          <div class="section-title"><h2>По глаголам</h2><button type="button" data-open-progress>Подробнее</button></div>
+          <div id="verb-progress-list" class="verb-progress-list"></div>
+        </div>
+
+        <button class="reference-card" type="button" data-open-reference>
+          <span><small>Шпаргалка</small><strong>6 глаголов × 2 времени</strong></span>
+          <span class="reference-arrow">↗</span>
+        </button>
+      </aside>
+    </main>
+  </div>
+
+  <dialog id="bank-dialog" class="modal modal-wide">
+    <div class="modal-head">
+      <div><p class="eyebrow">Все упражнения</p><h2>Банк заданий</h2></div>
+      <button class="close-button" type="button" data-close-dialog aria-label="Закрыть">×</button>
+    </div>
+    <div class="bank-toolbar">
+      <label>Время<select id="bank-tense"><option value="all">Оба времени</option><option value="present">Präsens</option><option value="past">Präteritum</option></select></label>
+      <label>Глагол<select id="bank-verb"><option value="all">Все глаголы</option></select></label>
+    </div>
+    <div id="bank-list" class="bank-list"></div>
+  </dialog>
+
+  <dialog id="reference-dialog" class="modal modal-wide">
+    <div class="modal-head">
+      <div><p class="eyebrow">Шпаргалка</p><h2>Формы модальных глаголов</h2></div>
+      <button class="close-button" type="button" data-close-dialog aria-label="Закрыть">×</button>
+    </div>
+    <p class="reference-note">В Präteritum модальные глаголы теряют умлаут. Если есть смысловой глагол, он остаётся в инфинитиве в конце. В упражнениях с <b>mögen</b> объект обычно стоит в Akkusativ. Важно: <b>möchte</b> выражает вежливое желание и не является прошедшей формой <b>mögen</b>; прошедшая форма — <b>mochte</b>.</p>
+    <div id="reference-grid" class="reference-grid"></div>
+  </dialog>
+
+  <dialog id="progress-dialog" class="modal">
+    <div class="modal-head">
+      <div><p class="eyebrow">Ваш результат</p><h2>Прогресс</h2></div>
+      <button class="close-button" type="button" data-close-dialog aria-label="Закрыть">×</button>
+    </div>
+    <div id="progress-details" class="progress-details"></div>
+    <button class="danger-button" type="button" id="reset-progress">Сбросить прогресс</button>
+  </dialog>
+
+  <script src="./app.js"></script>
+</body>
+</html>
