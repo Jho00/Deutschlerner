@@ -3,22 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Интерактивный тренажёр немецких модальных глаголов в Präsens и Präteritum." />
+  <meta name="description" content="Тренажёр немецкого языка с модальными глаголами и 600 карточками существительных A1–A2." />
   <meta name="theme-color" content="#1248d8" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231248d8'/%3E%3Cpath d='M8 9h16v4H8zm0 10h16v4H8z' fill='white'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23ff6a3d'/%3E%3C/svg%3E" />
-  <title>Modal — тренажёр немецких глаголов</title>
+  <title>Deutschtrainer — тренажёр немецкого</title>
   <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./nouns.css" />
 </head>
 <body>
   <div class="ambient ambient-one" aria-hidden="true"></div>
   <div class="ambient ambient-two" aria-hidden="true"></div>
 
-  <div class="app-shell">
+  <div class="app-shell" id="home-view">
+    <header class="topbar section-topbar">
+      <a class="brand" href="#home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+        <span>Deutschtrainer</span>
+      </a>
+    </header>
+    <main class="trainer-home" tabindex="-1">
+      <p class="eyebrow">Deutsch · A1–A2</p>
+      <h1>Тренажёр немецкого</h1>
+      <p class="home-intro">Выберите раздел для тренировки.</p>
+      <nav class="trainer-links" aria-label="Разделы тренажёра">
+        <a class="trainer-link trainer-link-verbs" href="#practice">
+          <span class="trainer-example trainer-example-verb" lang="de" aria-hidden="true">ich <b>kann</b></span>
+          <span class="trainer-link-title">Модальные глаголы</span>
+          <span class="trainer-link-note">Практика Präsens и Präteritum</span>
+          <span class="trainer-link-arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="trainer-link trainer-link-nouns" href="#nouns">
+          <span class="trainer-example trainer-example-noun" lang="de" aria-hidden="true"><b>der</b><b>die</b><b>das</b></span>
+          <span class="trainer-link-title">Существительные</span>
+          <span class="trainer-link-note">600 карточек с артиклями</span>
+          <span class="trainer-link-arrow" aria-hidden="true">↗</span>
+        </a>
+      </nav>
+    </main>
+  </div>
+
+  <div class="app-shell" id="modal-view" hidden>
     <header class="topbar">
-      <a class="brand" href="#practice" aria-label="Modal, на главную">
+      <a class="brand" href="#home" aria-label="Modal, к разделам">
         <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
         <span>MODAL</span>
-        <small>Deutschtrainer</small>
+        <small class="modal-return">← К разделам</small>
       </a>
 
       <nav class="top-actions" aria-label="Основная навигация">
@@ -33,7 +62,7 @@
       </button>
     </header>
 
-    <main id="practice" class="workspace">
+    <main id="practice" class="workspace" tabindex="-1">
       <aside class="control-panel" aria-label="Настройки тренировки">
         <div class="panel-heading">
           <p class="eyebrow">Режим</p>
@@ -154,6 +183,99 @@
     </main>
   </div>
 
+  <div class="app-shell" id="nouns-view" hidden>
+    <header class="topbar section-topbar">
+      <a class="brand" href="#home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+        <span>Deutschtrainer</span>
+      </a>
+      <a class="section-back" href="#home">← К разделам</a>
+    </header>
+
+    <main class="noun-workspace" tabindex="-1">
+      <aside class="control-panel noun-controls" aria-label="Настройки тренировки">
+        <p class="eyebrow">Nomen · A1–A2</p>
+        <h1>Существительные</h1>
+        <fieldset class="mode-switcher noun-mode-switcher">
+          <legend>Выберите режим</legend>
+          <button class="mode-button is-active" type="button" data-noun-mode="learn" aria-pressed="true">
+            <span class="mode-icon" aria-hidden="true">Aa</span><span><b>Карточки</b><small>Выбор артикля</small></span>
+          </button>
+          <button class="mode-button" type="button" data-noun-mode="cases" aria-pressed="false">
+            <span class="mode-icon" aria-hidden="true">4</span><span><b>Падежи</b><small>Артикль в предложении</small></span>
+          </button>
+          <button class="mode-button" type="button" data-noun-mode="test" aria-pressed="false">
+            <span class="mode-icon" aria-hidden="true">30</span><span><b>Тест</b><small>30 случайных заданий</small></span>
+          </button>
+        </fieldset>
+
+        <div id="noun-topic-controls">
+          <label class="select-label" for="noun-topic">Тема</label>
+          <div class="select-wrap">
+            <select id="noun-topic"><option value="all">Все темы вперемешку</option></select>
+            <span aria-hidden="true">⌄</span>
+          </div>
+        </div>
+
+        <div class="noun-progress">
+          <div class="noun-progress-line">
+            <label for="noun-progress">Освоено слов</label>
+            <b id="noun-progress-text" aria-live="polite">0 из 600</b>
+          </div>
+          <progress id="noun-progress" max="600" value="0"></progress>
+        </div>
+      </aside>
+
+      <section class="practice-column noun-practice" aria-label="Тренировка существительных">
+        <div class="noun-session-line" id="noun-session-line">
+          <span id="noun-counter"></span>
+          <span id="noun-score"></span>
+        </div>
+
+        <article class="exercise-card noun-card" id="noun-card" aria-labelledby="noun-prompt">
+          <div class="noun-card-header">
+            <div class="card-meta">
+              <span class="tense-badge" id="noun-mode-badge">Карточка</span>
+              <span class="verb-badge" id="noun-group-badge"></span>
+            </div>
+            <label class="noun-translation-toggle">
+              <input id="noun-show-translation" type="checkbox" aria-controls="noun-translation" checked />
+              Показывать перевод
+            </label>
+          </div>
+          <div class="noun-prompt-stage">
+            <p id="noun-instruction" class="noun-instruction"></p>
+            <h2 id="noun-prompt" class="noun-prompt" lang="de" tabindex="-1"><span id="noun-prefix"></span><span id="noun-article"></span><span id="noun-tail"></span></h2>
+            <p class="translation noun-translation" id="noun-translation" hidden></p>
+          </div>
+
+          <div class="noun-choices" id="noun-choices" role="group" aria-label="Варианты артикля"></div>
+          <div class="noun-feedback" id="noun-feedback" hidden>
+            <div role="status">
+              <strong id="noun-feedback-title"></strong>
+              <p id="noun-feedback-rule"></p>
+            </div>
+            <button class="check-button" type="button" id="noun-next-question">Следующее →</button>
+          </div>
+        </article>
+
+        <article class="exercise-card noun-card noun-panel" id="noun-test-intro" hidden>
+          <p class="eyebrow">Все темы</p>
+          <h2>Тест на артикли</h2>
+          <p>В первых 20 заданиях выберите <span lang="de">der, die, das</span>. В следующих 10 вставьте артикль в предложение. При каждом запуске слова выбираются заново из всего словаря.</p>
+          <button class="check-button" type="button" id="noun-start-test">Начать тест →</button>
+        </article>
+
+        <article class="exercise-card noun-card noun-panel" id="noun-result" hidden>
+          <p class="eyebrow" id="noun-result-label">Тест завершён</p>
+          <h2 id="noun-result-score" tabindex="-1"></h2>
+          <p id="noun-result-detail"></p>
+          <button class="check-button" type="button" id="noun-restart-test">Новый тест ↻</button>
+        </article>
+      </section>
+    </main>
+  </div>
+
   <dialog id="bank-dialog" class="modal modal-wide">
     <div class="modal-head">
       <div><p class="eyebrow">Все упражнения</p><h2>Банк заданий</h2></div>
@@ -184,6 +306,11 @@
     <button class="danger-button" type="button" id="reset-progress">Сбросить прогресс</button>
   </dialog>
 
+  <script src="./navigation.js"></script>
   <script src="./app.js"></script>
+  <script src="./noun-data.js"></script>
+  <script src="./noun-exercises.js"></script>
+  <script src="./noun-translations.js"></script>
+  <script src="./nouns.js"></script>
 </body>
 </html>

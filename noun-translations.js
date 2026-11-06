@@ -1,0 +1,110 @@
+// Русская форма зависит от перевода конструкции, а не от немецкого падежа.
+// Например, danken требует Dativ, а «благодарить» — винительного падежа.
+const RUSSIAN_CONTEXT_FORMS = {
+  acc: {
+    Apfel: "яблоко", Birne: "грушу", Banane: "банан", Orange: "апельсин", Erdbeere: "клубнику",
+    Traube: "виноградину", Kirsche: "вишню", Pfirsich: "персик", Ananas: "ананас", Kartoffel: "картофель",
+    Tomate: "помидор", Gurke: "огурец", Karotte: "морковь", Salat: "салат", Bohne: "фасоль",
+    Pilz: "гриб", Brot: "хлеб", Brötchen: "булочку", Käse: "сыр", Ei: "яйцо",
+    Wurst: "колбасу", Schinken: "ветчину", Hähnchen: "курицу", Fisch: "рыбу", Fleisch: "мясо",
+    Reis: "рис", Nudel: "макаронину", Suppe: "суп", Kuchen: "пирог", Torte: "торт",
+    Keks: "печенье", Schokolade: "шоколад", Eis: "мороженое", Wasser: "воду", Milch: "молоко",
+    Tee: "чай", Kaffee: "кофе", Saft: "сок", Limonade: "лимонад", Bier: "пиво",
+    Wein: "вино", Kakao: "какао", Mineralwasser: "минеральную воду", Zitrone: "лимон", Zucker: "сахар",
+    Hemd: "рубашку", Bluse: "блузку", Hose: "брюки", Weste: "жилет", Rock: "юбку",
+    Kleid: "платье", Jacke: "куртку", Mantel: "пальто", Pullover: "свитер", "T-Shirt": "футболку",
+    Mütze: "шапку", Hut: "шляпу", Schal: "шарф", Gürtel: "ремень", Anzug: "костюм",
+    Tasche: "сумку", Rucksack: "рюкзак", Geldbörse: "кошелёк", Brille: "очки", Uhr: "часы",
+    Ring: "кольцо", Stoff: "ткань", Knopf: "пуговицу", Kugelschreiber: "шариковую ручку",
+    Bleistift: "карандаш", Wörterbuch: "словарь", Computer: "компьютер", Spiel: "игру", Ball: "мяч",
+    Speisekarte: "меню", Buch: "книгу", Satz: "предложение", Text: "текст", Frage: "вопрос",
+    Antwort: "ответ", Beispiel: "пример", Brief: "письмо", Zeitung: "газету", Zeitschrift: "журнал",
+    Nachricht: "сообщение", "E-Mail": "электронное письмо", Einladung: "приглашение", Geschichte: "историю",
+    Fahrplan: "расписание движения", Adresse: "адрес", Eingang: "вход", Ausgang: "выход", Hotel: "гостиницу",
+    Apotheke: "аптеку", Postamt: "почтовое отделение", Bahnhof: "вокзал", Spielplatz: "детскую площадку",
+    Parkplatz: "парковку", Haltestelle: "остановку", Schule: "школу", Supermarkt: "супермаркет",
+    Arzt: "врача", Ärztin: "врача", Reiseführer: "путеводитель", Hund: "собаку", Katze: "кошку",
+    Kaninchen: "кролика", Hamster: "хомяка", Meerschweinchen: "морскую свинку", Pferd: "лошадь",
+    Kuh: "корову", Schwein: "свинью", Schaf: "овцу", Ziege: "козу", Huhn: "курицу",
+    Hahn: "петуха", Ente: "утку", Gans: "гуся", Esel: "осла", Bär: "медведя", Löwe: "льва",
+    Elefant: "слона", Affe: "обезьяну", Giraffe: "жирафа", Zebra: "зебру", Hase: "зайца",
+    Mutter: "маму", Vater: "папу", Sohn: "сына", Tochter: "дочь", Bruder: "брата", Schwester: "сестру",
+    Freund: "друга", Freundin: "подругу", Nachbar: "соседа", Nachbarin: "соседку",
+    Chef: "начальника", Chefin: "начальницу", Kollege: "коллегу", Kollegin: "коллегу",
+    Lehrer: "учителя", Lehrerin: "учительницу", Fahrer: "водителя", Fahrerin: "водителя",
+  },
+  dat: {
+    Mutter: "маме", Vater: "папе", Großmutter: "бабушке", Großvater: "дедушке", Kind: "ребёнку",
+    Junge: "мальчику", Mädchen: "девочке", Mann: "мужчине", Frau: "женщине", Freund: "другу",
+    Freundin: "подруге", Nachbar: "соседу", Nachbarin: "соседке", Gast: "гостю", Kollege: "коллеге",
+    Kollegin: "коллеге", Kunde: "клиенту", Kundin: "клиентке", Schüler: "ученику", Schülerin: "ученице",
+    Student: "студенту", Studentin: "студентке", Tourist: "туристу", Touristin: "туристке",
+    Patient: "пациенту", Patientin: "пациентке", Bruder: "брату", Schwester: "сестре",
+    Tante: "тёте", Onkel: "дяде", Cousin: "двоюродному брату", Cousine: "двоюродной сестре",
+    Arzt: "врачу", Ärztin: "врачу",
+  },
+  gen: {
+    Hotel: "гостиницы", Pension: "гостевого дома", Jugendherberge: "молодёжного хостела",
+    Bahnhof: "вокзала", Flughafen: "аэропорта", Restaurant: "ресторана", Café: "кафе", Bäckerei: "пекарни",
+    Geschäft: "магазина", Laden: "магазина", Supermarkt: "супермаркета", Postamt: "почтового отделения",
+    Rathaus: "ратуши", Museum: "музея", Kino: "кинотеатра", Theater: "театра", Bibliothek: "библиотеки",
+    Krankenhaus: "больницы", Schwimmbad: "бассейна", Kaufhaus: "универмага",
+    Einkaufszentrum: "торгового центра", Zoo: "зоопарка", Firma: "фирмы", Gebäude: "здания",
+    Hemd: "рубашки", Bluse: "блузки", Hose: "брюк", Rock: "юбки", Kleid: "платья", Jacke: "куртки",
+    Mantel: "пальто", Pullover: "свитера", "T-Shirt": "футболки", Schal: "шарфа", Gürtel: "ремня",
+    Handschuh: "перчатки", Tasche: "сумки", Rucksack: "рюкзака", Stuhl: "стула", Tisch: "стола",
+    Stoff: "ткани", Auto: "машины", Fahrrad: "велосипеда", Motorrad: "мотоцикла", Handy: "мобильного телефона",
+    Reise: "путешествия", Urlaub: "отпуска", Ausflug: "экскурсии", Tour: "тура", Fahrt: "поездки",
+    Geschichte: "истории", Kurs: "курса", Unterricht: "урока", Film: "фильма", Konzert: "концерта",
+    Treffen: "встречи", Fest: "праздника", Spiel: "игры", Training: "тренировки", Jahr: "года",
+    Woche: "недели", Monat: "месяца", Tag: "дня", Hund: "собаки", Katze: "кошки", Maus: "мыши",
+    Kaninchen: "кролика", Pferd: "лошади", Kuh: "коровы", Schwein: "свиньи", Schaf: "овцы", Ziege: "козы",
+    Huhn: "курицы", Ente: "утки", Gans: "гуся", Esel: "осла", Bär: "медведя", Löwe: "льва", Tiger: "тигра",
+    Elefant: "слона", Affe: "обезьяны", Zebra: "зебры", Wolf: "волка", Fuchs: "лисы", Hase: "зайца",
+    Krokodil: "крокодила", Wort: "слова", Satz: "предложения", Text: "текста", Buch: "книги",
+    Name: "имени", Vorname: "личного имени", Nachname: "фамилии", Farbe: "цвета", Frage: "вопроса",
+    Antwort: "ответа", Beispiel: "примера", Fehler: "ошибки", Punkt: "точки", Thema: "темы",
+    Datum: "даты", Bild: "картины", Lied: "песни", Brief: "письма", Wasser: "воды", Milch: "молока",
+    Tee: "чая", Kaffee: "кофе", Kakao: "какао", Mineralwasser: "минеральной воды", Suppe: "супа",
+    Hähnchen: "курицы", Reis: "риса", Fleisch: "мяса", Ofen: "духовки", Kühlschrank: "холодильника",
+    Patient: "пациента", Patientin: "пациентки", Kind: "ребёнка", Baby: "младенца", Lehrer: "учителя",
+    Lehrerin: "учительницы", Schüler: "ученика", Schülerin: "ученицы", Student: "студента",
+    Studentin: "студентки", Mutter: "мамы", Vater: "папы", Sohn: "сына", Tochter: "дочери",
+    Nachbar: "соседа", Nachbarin: "соседки", Gast: "гостя", Kollege: "коллеги", Kollegin: "коллеги",
+    Kunde: "клиента", Kundin: "клиентки", Tourist: "туриста", Touristin: "туристки",
+  },
+  time: {
+    Januar: "в январе", Februar: "в феврале", März: "в марте", April: "в апреле", Mai: "в мае", Juni: "в июне",
+    Juli: "в июле", August: "в августе", September: "в сентябре", Oktober: "в октябре",
+    November: "в ноябре", Dezember: "в декабре", Frühling: "весной", Sommer: "летом", Herbst: "осенью", Winter: "зимой",
+  },
+  transport: {
+    Auto: "на машине", Bus: "на автобусе", Bahn: "на поезде", Zug: "на поезде",
+    Straßenbahn: "на трамвае", "U-Bahn": "на метро", "S-Bahn": "на электричке", Taxi: "на такси",
+    Fahrrad: "на велосипеде", Motorrad: "на мотоцикле", Fähre: "на пароме", Flugzeug: "на самолёте", Schiff: "на корабле",
+  },
+  route: {
+    Weg: "по дороге", Straße: "по улице", Bus: "за автобусом", Auto: "за машиной",
+    Zug: "за поездом", Fahrrad: "за велосипедом", Mann: "за мужчиной", Frau: "за женщиной",
+    Junge: "за мальчиком", Mädchen: "за девочкой", Hund: "за собакой", Katze: "за кошкой",
+    Reiseführer: "за экскурсоводом", Tourist: "за туристом", Touristin: "за туристкой",
+    Fahrer: "за водителем", Fahrerin: "за водителем",
+  },
+  place: {
+    Haus: "перед домом", Wohnung: "у двери квартиры", Zimmer: "у двери комнаты", Tür: "у двери",
+    Eingang: "у входа", Bahnhof: "перед вокзалом", Garage: "перед гаражом", Hotel: "перед гостиницей",
+    Restaurant: "перед рестораном", Café: "перед кафе", Bäckerei: "перед пекарней", Apotheke: "перед аптекой",
+    Bank: "перед банком", Rathaus: "перед ратушей", Museum: "перед музеем", Kino: "перед кинотеатром",
+    Bibliothek: "перед библиотекой", Krankenhaus: "перед больницей", Schule: "перед школой", Kaufhaus: "перед универмагом",
+  },
+};
+
+function translateNounQuestion({ noun, template }) {
+  if (!template) return noun.translation;
+  const sentence = template.ru.replace(/\{(\w+)\}/, (_, form) =>
+    form === "nom"
+      ? noun.translation.split(/,| \(/, 1)[0]
+      : RUSSIAN_CONTEXT_FORMS[form][noun.word]
+  );
+  return sentence[0].toUpperCase() + sentence.slice(1);
+}

@@ -248,6 +248,7 @@ const DEFAULT_PROGRESS = {
 };
 
 const els = {
+  modalView: document.querySelector("#modal-view"),
   exerciseCard: document.querySelector("#exercise-card"),
   summary: document.querySelector("#session-summary"),
   questionCounter: document.querySelector("#question-counter"),
@@ -405,7 +406,7 @@ function renderQuestion() {
 
   window.requestAnimationFrame(() => {
     const target = isChoice ? els.choiceGrid.querySelector("button") : els.answerInput;
-    if (target && window.matchMedia("(min-width: 821px)").matches) target.focus({ preventScroll: true });
+    if (!els.modalView.hidden && target && window.matchMedia("(min-width: 821px)").matches) target.focus({ preventScroll: true });
   });
 }
 
@@ -620,7 +621,8 @@ function setupControls() {
     startSession({ focus: false });
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && answered && !document.querySelector("dialog[open]")) {
+    const inExercise = event.target === document.body || els.exerciseCard.contains(event.target);
+    if (event.key === "Enter" && answered && !els.modalView.hidden && inExercise && !document.querySelector("dialog[open]")) {
       event.preventDefault();
       nextQuestion();
     }
@@ -678,6 +680,7 @@ function registerWebMCP() {
         selectedVerb = input.verb;
         els.verbFilter.value = input.verb;
         document.querySelectorAll("[data-tense]").forEach((button) => button.classList.toggle("is-active", button.dataset.tense === input.tense));
+        openModalPractice();
         startSession({ focus: false });
         return { status: "started", tense: selectedTense, verb: selectedVerb, questions: sessionQuestions.length };
       },
@@ -698,6 +701,7 @@ function registerWebMCP() {
         if (answered) throw new Error("На текущее задание уже дан ответ");
         const question = sessionQuestions[currentIndex];
         const correct = normalizeAnswer(input.answer) === normalizeAnswer(question.answer);
+        openModalPractice();
         submitAnswer(input.answer);
         return { status: "checked", correct, expected: question.answer, position: currentIndex + 1 };
       },
